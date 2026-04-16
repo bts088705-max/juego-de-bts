@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BTS Memory | Sonido Personalizado</title>
+    <title>BTS Memory | ARMY Views</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;800&display=swap');
         
@@ -14,96 +14,116 @@
             overflow: hidden;
         }
 
-        #intro {
-            position: fixed; width: 100%; height: 100%; background: #000;
-            z-index: 1000; display: flex; flex-direction: column; justify-content: center; align-items: center;
+        /* --- CONTADOR DISEÑO TIKTOK PREMIUM --- */
+        .tiktok-counter {
+            position: absolute;
+            top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 3000;
+            background: rgba(20, 0, 40, 0.9);
+            padding: 10px 22px;
+            border-radius: 50px;
+            border: 1.5px solid #7D26CD;
+            box-shadow: 0 0 20px rgba(125, 38, 205, 0.5);
         }
 
-        .grid {
-            display: grid; grid-template-columns: repeat(4, 80px); gap: 10px;
-            perspective: 1000px;
+        .mini-heart {
+            font-size: 20px;
+            filter: drop-shadow(0 0 8px #BB86FC);
+            animation: pulse 1.5s infinite;
         }
 
-        .card {
-            width: 80px; height: 100px; position: relative;
-            transform-style: preserve-3d; transition: transform 0.5s; cursor: pointer;
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
 
+        #view-count {
+            font-size: 18px;
+            font-weight: 800;
+            color: #ffffff;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .army-label {
+            font-size: 11px;
+            font-weight: 800;
+            color: #BB86FC;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        /* -------------------------------------- */
+
+        #intro, #final-screen { position: fixed; width: 100%; height: 100%; background: #000; z-index: 1000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        #final-screen { display: none; z-index: 2000; }
+        .grid { display: grid; grid-template-columns: repeat(4, 80px); gap: 10px; perspective: 1000px; }
+        .card { width: 80px; height: 100px; position: relative; transform-style: preserve-3d; transition: transform 0.5s; cursor: pointer; }
         .card.flipped { transform: rotateY(180deg); }
-
-        .card-front, .card-back {
-            position: absolute; width: 100%; height: 100%;
-            backface-visibility: hidden; display: flex;
-            align-items: center; justify-content: center;
-            border-radius: 10px; border: 2px solid #BB86FC;
-        }
-
+        .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; border-radius: 10px; border: 2px solid #BB86FC; }
         .card-front { background: #1a0033; font-size: 0.7rem; color: #BB86FC; font-weight: bold; }
         .card-back { background: #BB86FC; color: black; transform: rotateY(180deg); font-weight: 800; }
-
-        #final-screen {
-            display: none; position: fixed; width: 100%; height: 100%;
-            background: #000; z-index: 2000;
-            flex-direction: column; justify-content: center; align-items: center;
-        }
-
-        .bts-logo { font-size: 5rem; font-weight: 800; color: #BB86FC; text-shadow: 0 0 30px #BB86FC; }
-
-        .heart {
-            position: absolute; color: #BB86FC; font-size: 2rem;
-            animation: float-up 3s linear infinite; pointer-events: none;
-        }
-
-        @keyframes float-up {
-            0% { transform: translateY(100vh) scale(0); opacity: 1; }
-            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
-        }
-
-        .btn-bts {
-            padding: 15px 40px; border: 2px solid #BB86FC; background: none;
-            color: white; border-radius: 50px; cursor: pointer; letter-spacing: 3px;
-            text-transform: uppercase; margin-top: 20px;
-        }
+        .btn-bts { padding: 12px 30px; border: 2px solid #BB86FC; background: none; color: white; border-radius: 50px; cursor: pointer; letter-spacing: 2px; text-transform: uppercase; margin-top: 20px; font-size: 0.8rem; transition: 0.3s; }
+        .btn-bts:hover { background: #7D26CD; border-color: white; }
+        .heart-float { position: absolute; color: #BB86FC; font-size: 2rem; animation: float-up 3s linear infinite; pointer-events: none; }
+        @keyframes float-up { 0% { transform: translateY(100vh) scale(0); opacity: 1; } 100% { transform: translateY(-100vh) scale(1.5); opacity: 0; } }
     </style>
 </head>
 <body>
 
+    <div class="tiktok-counter">
+        <span class="mini-heart">💜</span>
+        <span id="view-count">7</span> <span class="army-label">ARMY</span>
+    </div>
+
     <div id="intro">
-        <h1 style="font-weight: 200; letter-spacing: 5px;">BTS MEMORY SOUND</h1>
-        <button class="btn-bts" onclick="iniciar()">EMPEZAR JUEGO 💜</button>
+        <h1 style="font-weight: 200; letter-spacing: 5px; font-size: 1.2rem;">BTS MEMORY SOUND</h1>
+        <button class="btn-bts" onclick="iniciar()">JUGAR 💜</button>
     </div>
 
     <div id="final-screen">
-        <div class="bts-logo">BTS</div>
-        <p style="letter-spacing: 5px; margin-top: 20px;">¡LO LOGRASTE, ARMY! 💜</p>
+        <h1 style="color: #BB86FC;">BTS</h1>
+        <p>¡LO LOGRASTE, ARMY! 💜</p>
         <button class="btn-bts" onclick="location.reload()">REINTENTAR</button>
     </div>
 
-    <div id="status" style="margin-bottom: 20px; color: #BB86FC;">PAREJAS: <span id="matches">0</span>/6</div>
+    <div id="status" style="margin-top: 60px; margin-bottom: 20px; color: #BB86FC;">PAREJAS: <span id="matches">0</span>/6</div>
     <div class="grid" id="grid"></div>
 
     <audio id="musicaFondo" src="Descargar-_4_.mp3" loop></audio>
-
     <audio id="musicaVictoria" src="Descargar-_3_.mp3"></audio>
 
     <script>
+        // --- CONTADOR SEGURO ---
+        async function getViews() {
+            try {
+                // Usamos un servicio más rápido
+                const res = await fetch('https://api.countapi.xyz/hit/bts-memory-game-liseth/visits');
+                const data = await res.json();
+                if(data.value) document.getElementById('view-count').innerText = data.value;
+            } catch (e) {
+                console.log("Cargando...");
+            }
+        }
+        getViews();
+
         const members = ['V', 'RM', 'JK', 'JIN', 'SUGA', 'JIMIN'];
-        let cardsData = [...members, ...members];
-        let flippedCards = [];
-        let matchedCount = 0;
-        
-        const fondo = document.getElementById('musicaFondo');
-        const victoria = document.getElementById('musicaVictoria');
+        let cardsData = [...members, ...members], flippedCards = [], matchedCount = 0;
+        const fondo = document.getElementById('musicaFondo'), victoria = document.getElementById('musicaVictoria');
 
         function iniciar() {
             document.getElementById('intro').style.display = 'none';
-            fondo.play().catch(e => console.log("Revisa el archivo Download-_4_.mp3"));
+            fondo.play().catch(e => console.log("Música lista"));
             setupGame();
         }
 
         function setupGame() {
             cardsData.sort(() => Math.random() - 0.5);
             const grid = document.getElementById('grid');
+            grid.innerHTML = '';
             cardsData.forEach((member) => {
                 const card = document.createElement('div');
                 card.className = 'card';
@@ -140,23 +160,16 @@
 
         function showWin() {
             setTimeout(() => {
-                // 🛑 DETENER LA PRIMERA MÚSICA
                 fondo.pause();
-                fondo.currentTime = 0;
-
-                // 🎉 EMPEZAR LA MÚSICA DE VICTORIA
-                victoria.play().catch(e => console.log("Revisa el archivo Download-_3_.mp3"));
-
-                // MOSTRAR PANTALLA Y CORAZONES
+                victoria.play();
                 document.getElementById('final-screen').style.display = 'flex';
                 for(let i=0; i<60; i++) setTimeout(crearCorazon, i * 80);
-
             }, 500);
         }
 
         function crearCorazon() {
             const h = document.createElement('div');
-            h.className = 'heart';
+            h.className = 'heart-float';
             h.innerText = '💜';
             h.style.left = Math.random() * 100 + 'vw';
             h.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
