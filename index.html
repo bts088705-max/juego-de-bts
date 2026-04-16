@@ -14,7 +14,7 @@
             overflow: hidden;
         }
 
-        /* --- CONTADOR --- */
+        /* --- CONTADOR DE VISTAS --- */
         .vistas-container {
             position: absolute;
             top: 20px;
@@ -25,7 +25,7 @@
 
         #num-vistas { font-size: 18px; font-weight: 800; color: #ffffff; }
 
-        /* --- CUADRÍCULA PARA 16 CARTAS (8 PAREJAS) --- */
+        /* --- TABLERO 4x4 (16 CARTAS) --- */
         .grid { 
             display: grid; 
             grid-template-columns: repeat(4, 80px); 
@@ -88,7 +88,7 @@
         }
         cargarVistas();
 
-        // AHORA SON 8 PAREJAS: Los 7 chicos + la carta especial de "BTS"
+        // 8 PAREJAS: Los 7 chicos + carta especial "BTS"
         const members = ['V', 'RM', 'JK', 'JIN', 'SUGA', 'JIMIN', 'J-HOPE', 'BTS'];
         let cardsData = [...members, ...members], flippedCards = [], matchedCount = 0;
         const fondo = document.getElementById('musicaFondo'), victoria = document.getElementById('musicaVictoria');
@@ -107,6 +107,7 @@
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.dataset.name = member;
+                // Las cartas ahora dicen "ARMY" por delante
                 card.innerHTML = `<div class="card-front">ARMY</div><div class="card-back">${member}</div>`;
                 card.onclick = () => flipCard(card);
                 grid.appendChild(card);
@@ -140,6 +141,7 @@
                 fondo.pause();
                 victoria.play();
                 document.getElementById('final-screen').style.display = 'flex';
+                // Más corazones para celebrar las 8 parejas
                 for(let i=0; i<60; i++) setTimeout(crearCorazon, i * 80);
             }, 500);
         }
