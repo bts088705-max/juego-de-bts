@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BTS Memory | OT7 Version</title>
+    <title>BTS Memory | Deluxe Edition</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;800&display=swap');
         
@@ -25,27 +25,29 @@
 
         #num-vistas { font-size: 18px; font-weight: 800; color: #ffffff; }
 
-        /* --- CUADRÍCULA AJUSTADA PARA 14 CARTAS --- */
+        /* --- CUADRÍCULA PARA 16 CARTAS (8 PAREJAS) --- */
         .grid { 
             display: grid; 
-            grid-template-columns: repeat(4, 75px); /* 4 columnas */
+            grid-template-columns: repeat(4, 80px); 
             gap: 10px; 
             perspective: 1000px; 
         }
 
-        /* En pantallas pequeñas usamos 3 columnas para que quepan las 14 */
-        @media (max-width: 400px) {
-            .grid { grid-template-columns: repeat(3, 80px); }
-        }
-
-        .card { width: 75px; height: 95px; position: relative; transform-style: preserve-3d; transition: transform 0.5s; cursor: pointer; }
+        .card { width: 80px; height: 100px; position: relative; transform-style: preserve-3d; transition: transform 0.5s; cursor: pointer; }
         .card.flipped { transform: rotateY(180deg); }
-        .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; border-radius: 10px; border: 2px solid #BB86FC; }
-        .card-front { background: #1a0033; font-size: 0.6rem; color: #BB86FC; font-weight: bold; }
+        
+        .card-front, .card-back { 
+            position: absolute; width: 100%; height: 100%; 
+            backface-visibility: hidden; display: flex; 
+            align-items: center; justify-content: center; 
+            border-radius: 10px; border: 2px solid #BB86FC; 
+        }
+        
+        .card-front { background: #1a0033; font-size: 0.7rem; color: #BB86FC; font-weight: bold; }
         .card-back { background: #BB86FC; color: black; transform: rotateY(180deg); font-weight: 800; font-size: 0.8rem; }
         
         .btn-bts { padding: 12px 30px; border: 2px solid #BB86FC; background: none; color: white; border-radius: 50px; cursor: pointer; text-transform: uppercase; margin-top: 20px; font-size: 0.8rem; }
-        
+
         #intro, #final-screen { position: fixed; width: 100%; height: 100%; background: #000; z-index: 1000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         #final-screen { display: none; z-index: 2000; }
 
@@ -62,33 +64,32 @@
     </div>
 
     <div id="intro">
-        <h1 style="font-weight: 200; letter-spacing: 5px; font-size: 1.2rem;">BTS MEMORY OT7</h1>
-        <button class="btn-bts" onclick="iniciar()">JUGAR CON LOS 7 💜</button>
+        <h1 style="font-weight: 200; letter-spacing: 5px; font-size: 1.2rem;">BTS MEMORY SOUND</h1>
+        <button class="btn-bts" onclick="iniciar()">JUGAR 💜</button>
     </div>
 
     <div id="final-screen">
-        <h1 style="color: #BB86FC; font-size: 4rem;">OT7</h1>
-        <p>¡LO LOGRASTE CON TODO BTS! 💜</p>
+        <h1 style="color: #BB86FC; font-size: 4rem;">BTS</h1>
+        <p>¡LO LOGRASTE, ARMY! 💜</p>
         <button class="btn-bts" onclick="location.reload()">REINTENTAR</button>
     </div>
 
-    <div id="status" style="margin-top: 70px; margin-bottom: 15px; color: #BB86FC;">PAREJAS: <span id="matches">0</span>/7</div>
+    <div id="status" style="margin-top: 60px; margin-bottom: 20px; color: #BB86FC;">PAREJAS: <span id="matches">0</span>/8</div>
     <div class="grid" id="grid"></div>
 
     <audio id="musicaFondo" src="Descargar-_4_.mp3" loop></audio>
     <audio id="musicaVictoria" src="Descargar-_3_.mp3"></audio>
 
     <script>
-        // Contador de vistas
         function cargarVistas() {
-            fetch('https://api.countapi.xyz/hit/bts-memory-ot7-version/vistas')
+            fetch('https://api.countapi.xyz/hit/bts-memory-game-final/vistas')
                 .then(res => res.json())
                 .then(data => { if(data.value) document.getElementById('num-vistas').innerText = data.value; });
         }
         cargarVistas();
 
-        // AHORA SÍ: LOS 7 INTEGRANTES
-        const members = ['V', 'RM', 'JK', 'JIN', 'SUGA', 'JIMIN', 'J-HOPE'];
+        // AHORA SON 8 PAREJAS: Los 7 chicos + la carta especial de "BTS"
+        const members = ['V', 'RM', 'JK', 'JIN', 'SUGA', 'JIMIN', 'J-HOPE', 'BTS'];
         let cardsData = [...members, ...members], flippedCards = [], matchedCount = 0;
         const fondo = document.getElementById('musicaFondo'), victoria = document.getElementById('musicaVictoria');
 
@@ -106,7 +107,7 @@
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.dataset.name = member;
-                card.innerHTML = `<div class="card-front">BTS</div><div class="card-back">${member}</div>`;
+                card.innerHTML = `<div class="card-front">ARMY</div><div class="card-back">${member}</div>`;
                 card.onclick = () => flipCard(card);
                 grid.appendChild(card);
             });
@@ -122,7 +123,7 @@
                         matchedCount++;
                         document.getElementById('matches').innerText = matchedCount;
                         flippedCards = [];
-                        if (matchedCount === 7) showWin();
+                        if (matchedCount === 8) showWin();
                     } else {
                         setTimeout(() => {
                             c1.classList.remove('flipped');
@@ -139,7 +140,7 @@
                 fondo.pause();
                 victoria.play();
                 document.getElementById('final-screen').style.display = 'flex';
-                for(let i=0; i<50; i++) setTimeout(crearCorazon, i * 60);
+                for(let i=0; i<60; i++) setTimeout(crearCorazon, i * 80);
             }, 500);
         }
 
