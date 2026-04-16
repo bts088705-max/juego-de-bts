@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTS Memory | Sonido Personalizado</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;800&display=swap');
+        
+        body { 
+            margin: 0; background: #05000a; color: white; 
+            font-family: 'Montserrat', sans-serif; display: flex; 
+            flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;
+            overflow: hidden;
+        }
+
+        #intro {
+            position: fixed; width: 100%; height: 100%; background: #000;
+            z-index: 1000; display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+
+        .grid {
+            display: grid; grid-template-columns: repeat(4, 80px); gap: 10px;
+            perspective: 1000px;
+        }
+
+        .card {
+            width: 80px; height: 100px; position: relative;
+            transform-style: preserve-3d; transition: transform 0.5s; cursor: pointer;
+        }
+
+        .card.flipped { transform: rotateY(180deg); }
+
+        .card-front, .card-back {
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden; display: flex;
+            align-items: center; justify-content: center;
+            border-radius: 10px; border: 2px solid #BB86FC;
+        }
+
+        .card-front { background: #1a0033; font-size: 0.7rem; color: #BB86FC; font-weight: bold; }
+        .card-back { background: #BB86FC; color: black; transform: rotateY(180deg); font-weight: 800; }
+
+        #final-screen {
+            display: none; position: fixed; width: 100%; height: 100%;
+            background: #000; z-index: 2000;
+            flex-direction: column; justify-content: center; align-items: center;
+        }
+
+        .bts-logo { font-size: 5rem; font-weight: 800; color: #BB86FC; text-shadow: 0 0 30px #BB86FC; }
+
+        .heart {
+            position: absolute; color: #BB86FC; font-size: 2rem;
+            animation: float-up 3s linear infinite; pointer-events: none;
+        }
+
+        @keyframes float-up {
+            0% { transform: translateY(100vh) scale(0); opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+        }
+
+        .btn-bts {
+            padding: 15px 40px; border: 2px solid #BB86FC; background: none;
+            color: white; border-radius: 50px; cursor: pointer; letter-spacing: 3px;
+            text-transform: uppercase; margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="intro">
+        <h1 style="font-weight: 200; letter-spacing: 5px;">BTS MEMORY SOUND</h1>
+        <button class="btn-bts" onclick="iniciar()">EMPEZAR JUEGO 💜</button>
+    </div>
+
+    <div id="final-screen">
+        <div class="bts-logo">BTS</div>
+        <p style="letter-spacing: 5px; margin-top: 20px;">¡LO LOGRASTE, ARMY! 💜</p>
+        <button class="btn-bts" onclick="location.reload()">REINTENTAR</button>
+    </div>
+
+    <div id="status" style="margin-bottom: 20px; color: #BB86FC;">PAREJAS: <span id="matches">0</span>/6</div>
+    <div class="grid" id="grid"></div>
+
+    <audio id="musicaFondo" src="Descargar-_4_.mp3" loop></audio>
+
+    <audio id="musicaVictoria" src="Descargar-_3_.mp3"></audio>
+
+    <script>
+        const members = ['V', 'RM', 'JK', 'JIN', 'SUGA', 'JIMIN'];
+        let cardsData = [...members, ...members];
+        let flippedCards = [];
+        let matchedCount = 0;
+        
+        const fondo = document.getElementById('musicaFondo');
+        const victoria = document.getElementById('musicaVictoria');
+
+        function iniciar() {
+            document.getElementById('intro').style.display = 'none';
+            fondo.play().catch(e => console.log("Revisa el archivo Download-_4_.mp3"));
+            setupGame();
+        }
+
+        function setupGame() {
+            cardsData.sort(() => Math.random() - 0.5);
+            const grid = document.getElementById('grid');
+            cardsData.forEach((member) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.dataset.name = member;
+                card.innerHTML = `<div class="card-front">BTS</div><div class="card-back">${member}</div>`;
+                card.onclick = () => flipCard(card);
+                grid.appendChild(card);
+            });
+        }
+
+        function flipCard(card) {
+            if (flippedCards.length < 2 && !card.classList.contains('flipped')) {
+                card.classList.add('flipped');
+                flippedCards.push(card);
+                if (flippedCards.length === 2) checkMatch();
+            }
+        }
+
+        function checkMatch() {
+            const [c1, c2] = flippedCards;
+            if (c1.dataset.name === c2.dataset.name) {
+                matchedCount++;
+                document.getElementById('matches').innerText = matchedCount;
+                flippedCards = [];
+                if (matchedCount === 6) showWin();
+            } else {
+                setTimeout(() => {
+                    c1.classList.remove('flipped');
+                    c2.classList.remove('flipped');
+                    flippedCards = [];
+                }, 1000);
+            }
+        }
+
+        function showWin() {
+            setTimeout(() => {
+                // 🛑 DETENER LA PRIMERA MÚSICA
+                fondo.pause();
+                fondo.currentTime = 0;
+
+                // 🎉 EMPEZAR LA MÚSICA DE VICTORIA
+                victoria.play().catch(e => console.log("Revisa el archivo Download-_3_.mp3"));
+
+                // MOSTRAR PANTALLA Y CORAZONES
+                document.getElementById('final-screen').style.display = 'flex';
+                for(let i=0; i<60; i++) setTimeout(crearCorazon, i * 80);
+
+            }, 500);
+        }
+
+        function crearCorazon() {
+            const h = document.createElement('div');
+            h.className = 'heart';
+            h.innerText = '💜';
+            h.style.left = Math.random() * 100 + 'vw';
+            h.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
+            document.getElementById('final-screen').appendChild(h);
+        }
+    </script>
+</body>
+</html>
